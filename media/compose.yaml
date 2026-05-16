@@ -1,7 +1,7 @@
 # Compose file for the *arr stack. Configuration files are stored in the
 # directory you launch the compose file on. Change to bind mounts if needed.
 # All containers are ran with user and group ids of the main user and
-# group to aviod permissions issues of downloaded files, please refer
+# group to avoid permissions issues of downloaded files, please refer
 # the read me file for more information.
 
 #############################################################################
