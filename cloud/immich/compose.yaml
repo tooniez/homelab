@@ -17,14 +17,14 @@ services:
     env_file:
       - .env
     ports:
-      - 2283:2283
+      - ${IMMICH_PORT:-2283}:2283
     depends_on:
       - redis
       - database
-    restart: always
+    restart: unless-stopped
     healthcheck:
       disable: false
-    # Hardware Transcoding (Intel) - uncomment if needed
+    # Hardware Transcoding (Intel QuickSync) - uncomment if needed
     # devices:
     #   - /dev/dri:/dev/dri
 
@@ -35,15 +35,21 @@ services:
       - model-cache:/cache
     env_file:
       - .env
-    restart: always
+    restart: unless-stopped
     healthcheck:
       disable: false
-    # Hardware-Accelerated ML (Intel OpenVINO) - uncomment and change image tag if needed
+    # Hardware-Accelerated ML — uncomment the block matching your accelerator.
+    # See https://immich.app/docs/features/ml-hardware-acceleration for the full list (NVIDIA CUDA, AMD ROCm, ARM NN, RKNN).
+    #
+    # Intel OpenVINO (iGPU / Arc):
     # image: ghcr.io/immich-app/immich-machine-learning:${IMMICH_VERSION:-release}-openvino
-    # device_cgroup_rules:
-    #   - 'c 189:* rmw'
     # devices:
     #   - /dev/dri:/dev/dri
+    #
+    # Google Coral USB Accelerator:
+    # image: ghcr.io/immich-app/immich-machine-learning:${IMMICH_VERSION:-release}-armnn
+    # device_cgroup_rules:
+    #   - 'c 189:* rmw'
     # volumes:
     #   - /dev/bus/usb:/dev/bus/usb
     #   - model-cache:/cache
@@ -53,7 +59,7 @@ services:
     image: docker.io/valkey/valkey:9-alpine
     healthcheck:
       test: redis-cli ping || exit 1
-    restart: always
+    restart: unless-stopped
 
   database:
     container_name: immich_postgres
@@ -66,7 +72,7 @@ services:
     volumes:
       - ${DB_DATA_LOCATION}:/var/lib/postgresql/data
     shm_size: 128mb
-    restart: always
+    restart: unless-stopped
     healthcheck:
       disable: false
 
