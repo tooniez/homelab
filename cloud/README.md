@@ -36,4 +36,4 @@ docker exec nextcloud-aio-mastercontainer grep password /mnt/docker-aio-config/d
 ```
 
 ## Immich
-Work in progress.
+Self-hosted Google Photos alternative with mobile backup, facial recognition, and automatic organization. See the full setup guide in the [immich](https://github.com/TechHutTV/homelab/tree/main/cloud/immich) directory.
